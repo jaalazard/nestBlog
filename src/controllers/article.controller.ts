@@ -7,8 +7,10 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { Article } from 'src/entities/article.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('article')
 export class ArticleController {
@@ -24,16 +26,19 @@ export class ArticleController {
     return this.articleService.getArticle(parseInt(id));
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post()
   saveArticle(@Body() article: Article) {
     return this.articleService.saveArticle(article);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
   updateArticle(@Param('id') id: number, @Body() article: Article) {
     return this.articleService.updateArticle(id, article);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   deleteArticle(@Param() params) {
     return this.articleService.deleteArticle(params.id);
